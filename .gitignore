@@ -1,0 +1,12 @@
+/app/bootstrap.php.cache
+/var/cache/*
+!var/cache/.gitkeep
+/app/config/parameters.yml
+/var/logs/*
+/var/sessions/*
+!var/logs/.gitkeep
+/var/phpunit.xml
+/composer.phar
+/vendor/
+/web/bundles/
+/nbproject/*
