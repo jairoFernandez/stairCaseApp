@@ -21,6 +21,12 @@ class Contacto extends Persona
      */
     private $id;
 
+    /**
+     *
+     * @var type string
+     * @ORM\ManyToOne(targetEntity="Usuario")
+     */
+    private $usuario;
 
     /**
      * Get id
@@ -31,5 +37,33 @@ class Contacto extends Persona
     {
         return $this->id;
     }
-}
+    
+    /**
+     * Set usuario
+     *
+     * @param \AppBundle\Entity\Usuario $usuario
+     *
+     * @return Contacto
+     */
+    public function setUsuario(\AppBundle\Entity\Usuario $usuario = null)
+    {
+        $this->usuario = $usuario;
 
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return \AppBundle\Entity\Usuario
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+    
+    public function __toString()
+    {
+        return $this->getPrimerNombre()." ".$this->getPrimerApellido();
+    }
+}

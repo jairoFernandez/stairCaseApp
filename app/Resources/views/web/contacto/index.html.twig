@@ -1,0 +1,15 @@
+{% extends 'web/dashboard.html.twig' %}
+
+{% block body %}
+    
+    <h1>Contacto list</h1>
+    <div class="col-lg-4">
+        <a href="{{ path('admin_new') }}">Create a new entry</a>
+    <div class="list-group">
+        {% for contacto in contactos %}
+            <a href="{{ path('admin_show', { 'id': contacto.id  }) }}" class="list-group-item">  <span class="badge">{{ contacto.telefono }}</span> {{ contacto.primerNombre }} {{ contacto.primerApellido }}</a>
+        {% endfor %}
+    </div>
+
+    </div>
+{% endblock %}

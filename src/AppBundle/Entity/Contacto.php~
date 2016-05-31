@@ -4,16 +4,13 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Models\Persona;
-use FOS\UserBundle\Model\User as BaseUser;
-
 /**
- * Usuario
+ * Contacto
  *
- * @ORM\Table(name="usuario")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UsuarioRepository")
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\Table(name="contacto")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ContactoRepository")
  */
-class Usuario extends BaseUser
+class Contacto extends Persona
 {
     /**
      * @var int
@@ -22,8 +19,14 @@ class Usuario extends BaseUser
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
+    /**
+     *
+     * @var type string
+     * @ORM\ManyToOne(targetEntity="Usuario")
+     */
+    private $usuario;
 
     /**
      * Get id
@@ -34,5 +37,8 @@ class Usuario extends BaseUser
     {
         return $this->id;
     }
+  
+
+
 }
 

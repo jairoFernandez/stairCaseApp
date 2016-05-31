@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usuario</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ usuario.id }}</td>
+            </tr>
+            <tr>
+                <th>Primernombre</th>
+                <td>{{ usuario.primerNombre }}</td>
+            </tr>
+            <tr>
+                <th>Segundonombre</th>
+                <td>{{ usuario.segundoNombre }}</td>
+            </tr>
+            <tr>
+                <th>Primerapellido</th>
+                <td>{{ usuario.primerApellido }}</td>
+            </tr>
+            <tr>
+                <th>Segundoapellido</th>
+                <td>{{ usuario.segundoApellido }}</td>
+            </tr>
+            <tr>
+                <th>Fechanacimiento</th>
+                <td>{% if usuario.fechaNacimiento %}{{ usuario.fechaNacimiento|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechaedicion</th>
+                <td>{% if usuario.fechaEdicion %}{{ usuario.fechaEdicion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechacreacion</th>
+                <td>{% if usuario.fechaCreacion %}{{ usuario.fechaCreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usuario_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('usuario_edit', { 'id': usuario.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

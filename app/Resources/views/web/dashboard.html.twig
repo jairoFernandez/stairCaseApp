@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Escalera App!{% endblock %}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Capacitación Destino">
+        <meta name="author" content="Jairo Fernández">
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="stylesheet" href="{{ asset('css/estilos.css') }}"/>
+
+    <!-- Start: Iconos -->
+    <script src="https://use.fontawesome.com/c3d7fecb45.js"></script>
+    <!-- End: Iconos -_>
+    <!-- Start: Latest compiled and minified CSS -->
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{{ asset('css/bootstrap/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="{{ asset('js/ie-emulation-modes-warning.js') }}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- End:  Latest compiled and minified CSS -->
+</head>
+<body>
+
+    <!-- Start: Menu -->
+    {% embed "fragmentos/menu.html.twig" %}    
+    {% endembed %}
+    <!-- End: Menu -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <!-- Start: Menu lateral -->
+                {% embed "fragmentos/menulateral.html.twig" %}    
+                {% endembed %}
+                <!-- End: Menu lateral -->
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <!-- Start: Mensajes -->
+                {% if app.session.started %}
+                    {% for flashMessage in app.session.flashbag.get('notice') %}
+                        <div class="alert alert-{{ flashMessage.alert }} alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                            </button>
+                            <strong>{{ flashMessage.title }}</strong> {{ flashMessage.message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <!-- End: Mensajes -->
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+
+<!-- Start: Scripts -->
+<!-- Bootstrap core JavaScript
+   ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{ asset('js/jquery.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="{{ asset('js/holder.min.js') }}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="{{ asset('js/ie10-viewport-bug-workaround.js') }}"></script>
+<script src="{{ asset('js/funciones.js') }}"></script>
+<!-- End: Scripts -->
+{% block javascripts %}{% endblock %}
+</body>
+</html>
+

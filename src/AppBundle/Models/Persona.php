@@ -7,32 +7,34 @@
  */
 
 namespace AppBundle\Models;
-use Doctrine\ORM\Mapping\Column; 
+
+use Doctrine\ORM\Mapping\Column;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @MappedSuperclass
+ * @ORM\HasLifecycleCallbacks()
  */
-abstract class Persona
-{
+abstract class Persona {
+
     /**
      * @var string
      * @Column(type="string")
      */
     protected $primerNombre;
-    
+
     /**
      * @var string
      * @Column(type="string", nullable=true)
      */
     protected $segundoNombre;
-    
+
     /**
      * @var string
      * @Column(type="string")
      */
-    protected $aprimerApellido;
-    
+    protected $primerApellido;
+
     /**
      * @var string
      * @Column(type="string", nullable=true)
@@ -40,10 +42,81 @@ abstract class Persona
     protected $segundoApellido;
 
     /**
+     *
+     * @var type string
+     * @Column(type="string")
+     */
+    protected $telefono;
+
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+        return $this;
+    }
+
+        /**
+     * @var \DateTime
+     * @Column(type="date", nullable=true)
+     */
+    protected $fechaNacimiento;
+    
+   /**
      * @var \DateTime
      * @Column(type="datetime", nullable=true)
      */
-    protected $fechaNacimiento;
+    protected $fechaEdicion;
+
+    /**
+     *
+     * @var type \DateTime
+     * @Column(type="datetime", nullable=true) 
+     */
+    protected $fechaCreacion;
+
+    public function getFechaEdicion()
+    {
+        return $this->fechaEdicion;
+    }
+
+    public function setFechaEdicion(\DateTime $fechaEdicion)
+    {
+        $this->fechaEdicion = $fechaEdicion;
+        return $this;
+    }
+
+        
+    public function getFechaCreacion()
+    {
+        return $this->fechaCreacion;
+    }
+
+    public function setFechaCreacion($fechaCreacion)
+    {
+        $this->fechaCreacion = $fechaCreacion;
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setFecha()
+    {
+        $this->setFechaCreacion(new \DateTime());        
+        $this->setFechaEdicion(new \DateTime());
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setFechaActualizacion()
+    {      
+        $this->setFechaEdicion(new \DateTime());
+    }
     
     public function getPrimerNombre()
     {
@@ -55,9 +128,9 @@ abstract class Persona
         return $this->segundoNombre;
     }
 
-    public function getAprimerApellido()
+    public function getPrimerApellido()
     {
-        return $this->aprimerApellido;
+        return $this->primerApellido;
     }
 
     public function getSegundoApellido()
@@ -80,9 +153,9 @@ abstract class Persona
         $this->segundoNombre = $segundoNombre;
     }
 
-    public function setAprimerApellido($aprimerApellido)
+    public function setPrimerApellido($primerApellido)
     {
-        $this->aprimerApellido = $aprimerApellido;
+        $this->primerApellido = $primerApellido;
     }
 
     public function setSegundoApellido($segundoApellido)
@@ -94,4 +167,5 @@ abstract class Persona
     {
         $this->fechaNacimiento = $fechaNacimiento;
     }
+
 }
