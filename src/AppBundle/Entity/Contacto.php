@@ -9,6 +9,7 @@ use AppBundle\Models\Persona;
  *
  * @ORM\Table(name="contacto")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ContactoRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Contacto extends Persona
 {

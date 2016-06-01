@@ -2,55 +2,51 @@
 
 {% block body %}
     <h1>Contacto</h1>
+    <div class="col-lg-6">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Primer nombre</th>
+                    <td>{{ contacto.primerNombre }}</td>
+                </tr>
+                <tr>
+                    <th>Segundo nombre</th>
+                    <td>{{ contacto.segundoNombre }}</td>
+                </tr>
+                <tr>
+                    <th>Primer apellido</th>
+                    <td>{{ contacto.primerApellido }}</td>
+                </tr>
+                <tr>
+                    <th>Segundo apellido</th>
+                    <td>{{ contacto.segundoApellido }}</td>
+                </tr>
+                <tr>
+                    <th>Fecha nacimiento</th>
+                    <td>{% if contacto.fechaNacimiento %}{{ contacto.fechaNacimiento|date('Y-m-d H:i:s') }}{% endif %}</td>
+                </tr>
+                <tr>
+                    <th>Fecha edición</th>
+                    <td>{% if contacto.fechaEdicion %}{{ contacto.fechaEdicion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <table class="table table-bordered">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ contacto.id }}</td>
-            </tr>
-            <tr>
-                <th>Primernombre</th>
-                <td>{{ contacto.primerNombre }}</td>
-            </tr>
-            <tr>
-                <th>Segundonombre</th>
-                <td>{{ contacto.segundoNombre }}</td>
-            </tr>
-            <tr>
-                <th>Primerapellido</th>
-                <td>{{ contacto.primerApellido }}</td>
-            </tr>
-            <tr>
-                <th>Segundoapellido</th>
-                <td>{{ contacto.segundoApellido }}</td>
-            </tr>
-            <tr>
-                <th>Fechanacimiento</th>
-                <td>{% if contacto.fechaNacimiento %}{{ contacto.fechaNacimiento|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Fechaedicion</th>
-                <td>{% if contacto.fechaEdicion %}{{ contacto.fechaEdicion|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Fechacreacion</th>
-                <td>{% if contacto.fechaCreacion %}{{ contacto.fechaCreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('admin_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('admin_edit', { 'id': contacto.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
+        <ul>
+            <li>
+                <a href="{{ path('admin_index') }}">Back to the list</a>
+            </li>
+            <li>
+                <a href="{{ path('admin_edit', { 'id': contacto.id }) }}">Edit</a>
+            </li>
+            <li>
+                {{ form_start(delete_form) }}
                 <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                {{ form_end(delete_form) }}
+            </li>
+        </ul>
+    </div>
+    <div class="col-lg-6">
+        <strong>Escalera</strong>
+    </div>
 {% endblock %}

@@ -25,9 +25,9 @@ class ContactoController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $contactos = $em->getRepository('AppBundle:Contacto')->findAll();
-
+        
+        $contactos = $em->getRepository('AppBundle:Contacto')->findByUsuario($this->getUser());
+        
         return $this->render('web/contacto/index.html.twig', array(
             'contactos' => $contactos,
         ));
@@ -47,6 +47,7 @@ class ContactoController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $contacto->setUsuario($this->getUser());
             $em->persist($contacto);
             $em->flush();
             $this->MsgFlash("Creado correctamente.","info");
