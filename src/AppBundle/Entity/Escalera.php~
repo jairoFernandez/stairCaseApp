@@ -184,45 +184,5 @@ class Escalera
     {
         return $this->getNombre();;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->aspectos = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add aspecto
-     *
-     * @param \AppBundle\Entity\EscaleraAspectos $aspecto
-     *
-     * @return Escalera
-     */
-    public function addAspecto(\AppBundle\Entity\EscaleraAspectos $aspecto)
-    {
-        $this->aspectos[] = $aspecto;
-
-        return $this;
-    }
-
-    /**
-     * Remove aspecto
-     *
-     * @param \AppBundle\Entity\EscaleraAspectos $aspecto
-     */
-    public function removeAspecto(\AppBundle\Entity\EscaleraAspectos $aspecto)
-    {
-        $this->aspectos->removeElement($aspecto);
-    }
-
-    /**
-     * Get aspectos
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAspectos()
-    {
-        return $this->aspectos;
-    }
 }
+

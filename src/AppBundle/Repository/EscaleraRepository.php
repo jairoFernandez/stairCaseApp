@@ -10,4 +10,13 @@ namespace AppBundle\Repository;
  */
 class EscaleraRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function obtenerEventosXContacto($contacto)
+	{
+		$consulta = $this->getEntityManager()
+					->createQuery('
+						SELECT e FROM AppBundle:Escalera
+							JOIN 
+					');
+
+	}
 }

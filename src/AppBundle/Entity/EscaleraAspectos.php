@@ -25,7 +25,7 @@ class EscaleraAspectos
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Escalera")
+     * @ORM\ManyToOne(targetEntity="Escalera", inversedBy="aspectos")
      */
     private $pasoEscalera;
 

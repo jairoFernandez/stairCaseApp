@@ -6,8 +6,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Entity\EscaleraAspectos;
 use AppBundle\Entity\Contacto;
 use AppBundle\Form\ContactoType;
+use AppBundle\Form\EscaleraAspectosType;
 
 /**
  * Contacto controller.
@@ -16,6 +18,7 @@ use AppBundle\Form\ContactoType;
  */
 class ContactoController extends Controller
 {
+   
     /**
      * Lists all Contacto entities.
      *
@@ -30,7 +33,7 @@ class ContactoController extends Controller
         
         return $this->render('web/contacto/index.html.twig', array(
             'contactos' => $contactos,
-        ));
+            ));
     }
 
     /**
@@ -50,14 +53,15 @@ class ContactoController extends Controller
             $contacto->setUsuario($this->getUser());
             $em->persist($contacto);
             $em->flush();
-            $this->MsgFlash("Creado correctamente.","info");
+            $this->get('utilidades')->MsgFlash("Creado correctamente.","info");
+
             return $this->redirectToRoute('admin_show', array('id' => $contacto->getId()));
         }
 
         return $this->render('web/contacto/new.html.twig', array(
             'contacto' => $contacto,
             'form' => $form->createView(),
-        ));
+            ));
     }
 
     /**
@@ -68,12 +72,15 @@ class ContactoController extends Controller
      */
     public function showAction(Contacto $contacto)
     {
+        $em = $this->getDoctrine()->getManager();        
         $deleteForm = $this->createDeleteForm($contacto);
-
+        $pasos = $em->getRepository('AppBundle:Escalera')->findAll();
+        
         return $this->render('web/contacto/show.html.twig', array(
             'contacto' => $contacto,
             'delete_form' => $deleteForm->createView(),
-        ));
+            'pasos' => $pasos
+            ));
     }
 
     /**
@@ -92,7 +99,7 @@ class ContactoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($contacto);
             $em->flush();
-            $this->MsgFlash("Actualización correcta.");
+            $this->get('utilidades')->MsgFlash("Actualización correcta.");
             return $this->redirectToRoute('admin_edit', array('id' => $contacto->getId()));
         }
 
@@ -100,7 +107,7 @@ class ContactoController extends Controller
             'contacto' => $contacto,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        ));
+            ));
     }
 
     /**
@@ -118,7 +125,7 @@ class ContactoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($contacto);
             $em->flush();
-            $this->MsgFlash("Eliminado correctamente.","danger");
+            $this->get('utilidades')->MsgFlash("Eliminado correctamente.","danger");
         }
 
         return $this->redirectToRoute('admin_index');
@@ -134,21 +141,9 @@ class ContactoController extends Controller
     private function createDeleteForm(Contacto $contacto)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('admin_delete', array('id' => $contacto->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
+        ->setAction($this->generateUrl('admin_delete', array('id' => $contacto->getId())))
+        ->setMethod('DELETE')
+        ->getForm()
         ;
-    }
-    
-    private function MsgFlash($mensaje = "Acción Realizada correctamente.", $tipoAlerta = 'success', $tituloAlerta = 'Mensaje: ')
-    {
-        $this->get('session')->getFlashBag()->add(
-                'notice',
-                array(
-                    'alert' => $tipoAlerta,
-                    'title' => $tituloAlerta,
-                    'message' => $mensaje
-                )
-            );
     }
 }

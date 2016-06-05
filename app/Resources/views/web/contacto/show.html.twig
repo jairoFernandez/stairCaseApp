@@ -1,52 +1,72 @@
 {% extends 'web/dashboard.html.twig' %}
 
 {% block body %}
-    <h1>Contacto</h1>
-    <div class="col-lg-6">
-        <table class="table table-bordered">
-            <tbody>
-                <tr>
-                    <th>Primer nombre</th>
-                    <td>{{ contacto.primerNombre }}</td>
-                </tr>
-                <tr>
-                    <th>Segundo nombre</th>
-                    <td>{{ contacto.segundoNombre }}</td>
-                </tr>
-                <tr>
-                    <th>Primer apellido</th>
-                    <td>{{ contacto.primerApellido }}</td>
-                </tr>
-                <tr>
-                    <th>Segundo apellido</th>
-                    <td>{{ contacto.segundoApellido }}</td>
-                </tr>
-                <tr>
-                    <th>Fecha nacimiento</th>
-                    <td>{% if contacto.fechaNacimiento %}{{ contacto.fechaNacimiento|date('Y-m-d H:i:s') }}{% endif %}</td>
-                </tr>
-                <tr>
-                    <th>Fecha edición</th>
-                    <td>{% if contacto.fechaEdicion %}{{ contacto.fechaEdicion|date('Y-m-d H:i:s') }}{% endif %}</td>
-                </tr>
-            </tbody>
-        </table>
+<h1>Contacto</h1>
+<div class="col-lg-6">
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Primer nombre</th>
+                <td>{{ contacto.primerNombre }}</td>
+            </tr>
+            <tr>
+                <th>Segundo nombre</th>
+                <td>{{ contacto.segundoNombre }}</td>
+            </tr>
+            <tr>
+                <th>Primer apellido</th>
+                <td>{{ contacto.primerApellido }}</td>
+            </tr>
+            <tr>
+                <th>Segundo apellido</th>
+                <td>{{ contacto.segundoApellido }}</td>
+            </tr>
+            <tr>
+                <th>Fecha nacimiento</th>
+                <td>{% if contacto.fechaNacimiento %}{{ contacto.fechaNacimiento|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecha edición</th>
+                <td>{% if contacto.fechaEdicion %}{{ contacto.fechaEdicion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
 
-        <ul>
-            <li>
-                <a href="{{ path('admin_index') }}">Back to the list</a>
-            </li>
-            <li>
-                <a href="{{ path('admin_edit', { 'id': contacto.id }) }}">Edit</a>
-            </li>
-            <li>
-                {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-                {{ form_end(delete_form) }}
-            </li>
-        </ul>
+    
+    <a href="{{ path('admin_index') }}" class="btn btn-info">Volver al listado</a>
+    
+    <a href="{{ path('admin_edit', { 'id': contacto.id }) }}" class="btn btn-warning">Editar</a>
+    
+    {{ form_start(delete_form) }}
+    <input type="submit" value="Borrar" class="btn btn-danger btnEliminar" >
+    {{ form_end(delete_form) }}
+    
+</div>
+<div class="col-lg-6">
+    <strong>Escalera</strong>
+
+ <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  {% for paso in pasos %}
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a  class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ paso.id }}" aria-expanded="true" aria-controls="collapse-{{ paso.id }}">
+          {{ paso }}
+        </a> 
+      </h4>
     </div>
-    <div class="col-lg-6">
-        <strong>Escalera</strong>
+    <div id="collapse-{{ paso.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {{ paso.descripcion }}
+        <hr>
+        {% for detalles in paso.aspectos %}
+            {{ detalles }} <br/>
+        {% endfor %}
+      </div>
     </div>
+  </div>
+  {% endfor %}
+</div>
+
+</div>
 {% endblock %}

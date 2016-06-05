@@ -143,7 +143,8 @@ class LoadData implements FixtureInterface, ContainerAwareInterface
         $enviar1->setDescripcion('....');
         $enviar1->setPasoEscalera($enviar);
         $manager->persist($enviar1);
-        
+    
+
         $manager->flush();
 
     }

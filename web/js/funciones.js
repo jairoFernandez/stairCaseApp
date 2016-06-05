@@ -3,7 +3,7 @@
  */
 
 
-$(document).ready(function () {
+ $(document).ready(function () {
     var menuPress = localStorage.getItem("menuLateral");
     
     if(menuPress != null){
@@ -18,7 +18,7 @@ $(document).ready(function () {
                 liactual.removeClass("active");
                 liactual.parent().find("span.sr-only").html(""); 
             }else{
-                
+
             }
         })
     }else{
@@ -40,19 +40,27 @@ $(document).ready(function () {
     })*/
 })
 
-$('.menu-lateral-item').click(function () {
+ $('.menu-lateral-item').click(function () {
     var id = $(this).attr("id");
     AsignarMenu(id);
 })
 
-function AsignarMenu(idMenu){
+ function AsignarMenu(idMenu){
     localStorage.setItem("menuLateral", idMenu);
     
     $(".menulateral li").each(function(){
         $(this).removeClass("active");
     })
-  
+
     $("#" + idMenu + "").addClass("active");
     $("#" + idMenu + "").parent().find("a").append("<span class='sr-only'>(current)</span>")
 }
+
+$('.btnEliminar').click(function(){
+    if(confirm('¿Está seguro de eliminar?')){
+        return true;
+    }else{
+        return false;        
+    }
+})
 
