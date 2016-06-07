@@ -6,7 +6,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 use AppBundle\Entity\EscaleraAspectos;
+use AppBundle\Entity\ContactoEscalera;
 use AppBundle\Entity\Contacto;
 use AppBundle\Form\ContactoType;
 use AppBundle\Form\EscaleraAspectosType;
@@ -18,7 +21,7 @@ use AppBundle\Form\EscaleraAspectosType;
  */
 class ContactoController extends Controller
 {
-   
+
     /**
      * Lists all Contacto entities.
      *
@@ -75,11 +78,16 @@ class ContactoController extends Controller
         $em = $this->getDoctrine()->getManager();        
         $deleteForm = $this->createDeleteForm($contacto);
         $pasos = $em->getRepository('AppBundle:Escalera')->findAll();
-        
+        $datos = $em->getRepository('AppBundle:ContactoEscalera')->findBy(array(
+            'contacto' => $contacto->getId()
+        ));
+        //dump($datos);
+
         return $this->render('web/contacto/show.html.twig', array(
             'contacto' => $contacto,
             'delete_form' => $deleteForm->createView(),
-            'pasos' => $pasos
+            'pasos' => $pasos,
+            'datos' => $datos
             ));
     }
 
@@ -145,5 +153,58 @@ class ContactoController extends Controller
         ->setMethod('DELETE')
         ->getForm()
         ;
+    }
+
+    /**
+     * [AgregarDetalle description]
+     * @Route("/agregarDetalle", name="agregar-detalle")
+     * @Method("POST")
+     */
+    public function AgregarDetalle(Request $request)
+    {
+        $idAspecto = $request->request->get('idAspecto');
+        $idContacto = $request->request->get('idContacto');
+        $descripcion = $request->request->get('descripcion');
+        $fechaRecibida = $request->request->get('fecha');
+        $fecha = date_create_from_format('Y-m-d', $fechaRecibida);
+        $mensajePeticion = "";
+        $codigo = "201";       
+
+        $em = $this->getDoctrine()->getManager();
+        $contacto = $em->getRepository('AppBundle:Contacto')->findOneBy(array(
+            'id' => $idContacto,
+            'usuario' => $this->getUser()->getId()
+            ));
+
+        $aspecto = $em->getRepository('AppBundle:EscaleraAspectos')->findOneBy(array(
+            'id'=>$idAspecto
+            ));
+
+        $contactoEscalera = new ContactoEscalera();         
+       
+        if($contacto == null || $contacto == ""){
+            $mensajePeticion = "Este contacto no le pertenece. ";
+            $codigo = "500";
+        }else{   
+            $contactoEscalera->setAspecto($aspecto);
+            $contactoEscalera->setContacto($contacto);
+            $contactoEscalera->setFecha($fecha);
+            $contactoEscalera->setDescripcion($descripcion);
+           
+            $em->persist($contactoEscalera);
+            dump($contactoEscalera);    
+            $em->flush();
+        }
+
+        $response = new JsonResponse();
+
+        $response->setData(array(
+            'DetalleAgregado' => "Asignación correcta. ",
+            'codigo'=> $codigo
+            ));
+
+        $response->setStatusCode($codigo);
+        return $response;
+
     }
 }

@@ -14,9 +14,13 @@ class EscaleraRepository extends \Doctrine\ORM\EntityRepository
 	{
 		$consulta = $this->getEntityManager()
 					->createQuery('
-						SELECT e FROM AppBundle:Escalera
-							JOIN 
+						SELECT e,a,c FROM AppBundle:Escalera e
+							JOIN e.aspectos a
+							LEFT JOIN a.contactosEscalera c 
+							WHERE c.id = :contacto
 					');
-
+		$consulta->setParameter('contacto', $contacto);			
+		return $consulta->getResult();
 	}
 }
+

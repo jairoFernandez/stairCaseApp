@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="contacto_escalera")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ContactoEscaleraRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class ContactoEscalera
 {
@@ -24,7 +25,7 @@ class ContactoEscalera
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="EscaleraAspectos")
+     * @ORM\ManyToOne(targetEntity="EscaleraAspectos", inversedBy="contactosEscalera")
      */
     private $aspecto;
 
@@ -38,17 +39,30 @@ class ContactoEscalera
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="datetime")
+     * @ORM\Column(name="fecha", type="datetime", nullable=true)
      */
     private $fecha;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="text")
+     * @ORM\Column(name="descripcion", type="text", nullable=true)
      */
     private $descripcion;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaEdicion", type="datetime", nullable=true)
+     */
+    private $fechaEdicion;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaCreacion", type="datetime", nullable=true)
+     */
+    private $fechaCreacion;
 
     /**
      * Get id
@@ -155,5 +169,70 @@ class ContactoEscalera
     public function getContacto()
     {
         return $this->contacto;
+    }
+
+       /**
+     * Set fechaEdicion
+     *
+     * @param \DateTime $fechaEdicion
+     *
+     * @return EscaleraAspectos
+     */
+    public function setFechaEdicion($fechaEdicion)
+    {
+        $this->fechaEdicion = $fechaEdicion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEdicion
+     *
+     * @return \DateTime
+     */
+    public function getFechaEdicion()
+    {
+        return $this->fechaEdicion;
+    }
+
+    /**
+     * Set fechaCreacion
+     *
+     * @param \DateTime $fechaCreacion
+     *
+     * @return EscaleraAspectos
+     */
+    public function setFechaCreacion($fechaCreacion)
+    {
+        $this->fechaCreacion = $fechaCreacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCreacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaCreacion()
+    {
+        return $this->fechaCreacion;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setFechaActualiza()
+    {
+        $this->setFechaCreacion(new \DateTime());        
+        $this->setFechaEdicion(new \DateTime());
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setFechaActualizacion()
+    {      
+        $this->setFechaEdicion(new \DateTime());
     }
 }

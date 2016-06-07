@@ -64,6 +64,12 @@ class EscaleraAspectos
      */
     private $estado;
 
+    /**
+     * [$contactosEscalera description]
+     * @var Array
+     * @ORM\OneToMany(targetEntity="ContactoEscalera", mappedBy="aspecto")
+     */
+    private $contactosEscalera;
 
     /**
      * Get id
@@ -241,5 +247,46 @@ class EscaleraAspectos
     public function __toString()
     {
         return $this->getPasoEscalera()." - " .$this->getNombre();
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contactosEscalera = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add contactosEscalera
+     *
+     * @param \AppBundle\Entity\ContactoEscalera $contactosEscalera
+     *
+     * @return EscaleraAspectos
+     */
+    public function addContactosEscalera(\AppBundle\Entity\ContactoEscalera $contactosEscalera)
+    {
+        $this->contactosEscalera[] = $contactosEscalera;
+
+        return $this;
+    }
+
+    /**
+     * Remove contactosEscalera
+     *
+     * @param \AppBundle\Entity\ContactoEscalera $contactosEscalera
+     */
+    public function removeContactosEscalera(\AppBundle\Entity\ContactoEscalera $contactosEscalera)
+    {
+        $this->contactosEscalera->removeElement($contactosEscalera);
+    }
+
+    /**
+     * Get contactosEscalera
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContactosEscalera()
+    {
+        return $this->contactosEscalera;
     }
 }

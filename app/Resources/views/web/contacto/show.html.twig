@@ -2,6 +2,7 @@
 
 {% block body %}
 <h1>Contacto</h1>
+<!-- Start: Sección detalle de contacto -->
 <div class="col-lg-6">
     <table class="table table-bordered">
         <tbody>
@@ -42,31 +43,125 @@
     {{ form_end(delete_form) }}
     
 </div>
+<!-- End: Sección detalle de contacto -->
+
+<!-- Start: Sección detalles escalera -->
 <div class="col-lg-6">
     <strong>Escalera</strong>
 
- <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-  {% for paso in pasos %}
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingOne">
-      <h4 class="panel-title">
-        <a  class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ paso.id }}" aria-expanded="true" aria-controls="collapse-{{ paso.id }}">
-          {{ paso }}
-        </a> 
-      </h4>
-    </div>
-    <div id="collapse-{{ paso.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-      <div class="panel-body">
-        {{ paso.descripcion }}
-        <hr>
-        {% for detalles in paso.aspectos %}
-            {{ detalles }} <br/>
-        {% endfor %}
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      {% for paso in pasos %}
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h4 class="panel-title">
+              <!-- Start: Título escalera -->
+              <a  class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ paso.id }}" aria-expanded="true" aria-controls="collapse-{{ paso.id }}">
+                  {{ paso }} 
+              </a> 
+              <!-- End: Título escalera -->
+          </h4>
       </div>
+      <div id="collapse-{{ paso.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+              <!-- Start: Descripción paso escalera -->
+              {{ paso.descripcion }}
+              <!-- End: Descripción paso escalera -->      
+              <hr>
+              <!-- Start: Items por paso -->      
+              {% for detalles in paso.aspectos %}
+              <p><a class="btn btn-warning btn-xs" data-toggle="modal" data-target="#myModal-{{ detalles.id }}" onclick="abrirModal({{ detalles.id }})"><i class="fa fa-plus fa-1x"></i></a> {{ loop.index }} - {{ detalles.nombre }} </p>
+
+              <!-- Start: Detalles para cada contacto -->
+              {% for dato in datos if dato.aspecto.id == detalles.id %}
+              <li> <strong>Descripción:</strong> {{ dato.descripcion }} ({{ dato.fecha|date('d-M-Y')  }})</li>
+              {% endfor %}
+              <!-- Start: Detalles para cada contacto -->
+
+              <!-- Modal -->
+              <div class="modal fade" id="myModal-{{ detalles.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">AGREGAR {{ detalles.nombre|upper }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <textarea required="required" id="detalle-{{ detalles.id }}" class="form-control" placeholder="Digita el detalle o descripción para {{ detalles.nombre }}"></textarea>
+                        <input required="required" type="date" id="fecha-{{ detalles.id }}" class="form-control">
+                        <hr/>
+                        <button onclick="enviarRespuesta({{ detalles.id }}, this);" class="btn btn-success btn-block btn-lg"> <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+
+
+        {% endfor %}
+        <!-- Start: Items por paso -->
+
     </div>
-  </div>
-  {% endfor %}
 </div>
+</div>
+{% endfor %}
+</div>
+<!-- End: Sección detalles escalera -->
 
 </div>
+{% endblock %}
+{% block javascripts %}
+  {{  parent()  }}
+<script type="text/javascript">
+    function abrirModal(id){
+        $("#detalle-"+id).focus();
+    //return true;
+    }
+
+
+    function enviarRespuesta(idAspecto, control){
+        var descripcion = $('#detalle-' + idAspecto).val();
+        var fecha = $('#fecha-' + idAspecto).val();
+        var contacto = "{{ contacto.id }}";
+        
+        $(control).text("Enviando...");
+
+        if(descripcion.length == 0){
+            alert("Su respuesta es muy corta, por favor denos más información.");
+            $(control).removeAttr("disabled");
+            $(control).html(" <i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar");
+            $('#detalle-'+idAspecto).focus();
+            return false;
+        }else{
+            enviar(idAspecto, contacto, descripcion, fecha);
+            $(control).html(" <i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar");
+            $(control).removeAttr("disabled");
+        }
+    }
+
+
+    function enviar(idAspecto, idContacto, descripcion, fecha){
+        var ruta = "{{ path('agregar-detalle') }}";
+        var settings = {
+              "url": ruta,
+              "method": "POST",
+              "data": {
+                "idAspecto": idAspecto,
+                "idContacto": idContacto,
+                "descripcion": descripcion,
+                "fecha": fecha
+            }
+        }
+
+        $.ajax(settings).done(function (response) {
+              console.log(response);
+              alert("Hemos recibido su respuesta.");
+        });
+    }
+
+
+</script>
 {% endblock %}

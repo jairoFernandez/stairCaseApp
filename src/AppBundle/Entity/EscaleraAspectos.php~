@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="escalera_aspectos")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\EscaleraAspectosRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class EscaleraAspectos
 {
@@ -24,7 +25,7 @@ class EscaleraAspectos
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Escalera")
+     * @ORM\ManyToOne(targetEntity="Escalera", inversedBy="aspectos")
      */
     private $pasoEscalera;
 
@@ -63,6 +64,12 @@ class EscaleraAspectos
      */
     private $estado;
 
+    /**
+     * [$contactosEscalera description]
+     * @var Array
+     * @ORM\OneToMany(targetEntity="ContactoEscalera", mappedBy="aspecto")
+     */
+    private $contactosEscalera;
 
     /**
      * Get id
@@ -202,6 +209,7 @@ class EscaleraAspectos
     {
         $this->setFechaCreacion(new \DateTime());        
         $this->setFechaEdicion(new \DateTime());
+        $this->setEstado(true);
     }
 
     /**
@@ -211,5 +219,33 @@ class EscaleraAspectos
     {      
         $this->setFechaEdicion(new \DateTime());
     }
-}
 
+    /**
+     * Set pasoEscalera
+     *
+     * @param \AppBundle\Entity\Escalera $pasoEscalera
+     *
+     * @return EscaleraAspectos
+     */
+    public function setPasoEscalera(\AppBundle\Entity\Escalera $pasoEscalera = null)
+    {
+        $this->pasoEscalera = $pasoEscalera;
+
+        return $this;
+    }
+
+    /**
+     * Get pasoEscalera
+     *
+     * @return \AppBundle\Entity\Escalera
+     */
+    public function getPasoEscalera()
+    {
+        return $this->pasoEscalera;
+    }
+    
+    public function __toString()
+    {
+        return $this->getPasoEscalera()." - " .$this->getNombre();
+    }
+}
