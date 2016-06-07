@@ -192,7 +192,6 @@ class ContactoController extends Controller
             $contactoEscalera->setDescripcion($descripcion);
            
             $em->persist($contactoEscalera);
-            dump($contactoEscalera);    
             $em->flush();
         }
 

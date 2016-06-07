@@ -1,0 +1,17 @@
+{% extends 'web/dashboard.html.twig' %}
+
+{% block body %}
+	<div class="col-lg-6">
+		<input type="search" placeholder="Buscar amigos..." class="form-control">
+	</div>
+	<hr>
+	<div id="resultados list-group">
+		  <a href="#" class="list-group-item"> Sin resultados</a>
+	</div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript">
+		
+	</script>
+{% endblock %}
