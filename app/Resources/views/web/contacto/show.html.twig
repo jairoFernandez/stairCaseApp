@@ -72,9 +72,11 @@
               <p><a class="btn btn-warning btn-xs" data-toggle="modal" data-target="#myModal-{{ detalles.id }}" onclick="abrirModal({{ detalles.id }})"><i class="fa fa-plus fa-1x"></i></a> {{ loop.index }} - {{ detalles.nombre }} </p>
 
               <!-- Start: Detalles para cada contacto -->
-              {% for dato in datos if dato.aspecto.id == detalles.id %}
-              <li> <strong>Descripción:</strong> {{ dato.descripcion }} ({{ dato.fecha|date('d-M-Y')  }})</li>
-              {% endfor %}
+              <div id="listado-{{ detalles.id }}">
+                {% for dato in datos if dato.aspecto.id == detalles.id %}
+                 <li> <strong>Descripción:</strong> {{ dato.descripcion }} ({{ dato.fecha|date('d-M-Y')  }})</li>
+                {% endfor %}
+              </div>
               <!-- Start: Detalles para cada contacto -->
 
               <!-- Modal -->
@@ -130,15 +132,22 @@
         $(control).text("Enviando...");
 
         if(descripcion.length == 0){
-            alert("Su respuesta es muy corta, por favor denos más información.");
+            alert("La descripción es muy corta. ");
             $(control).removeAttr("disabled");
             $(control).html(" <i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar");
             $('#detalle-'+idAspecto).focus();
+            return false;
+        }else if(fecha == "" || fecha == null){
+            $(control).html(" <i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar");
+            alert("Diligencia la fecha por favor. ");
+            $('#fecha-'+idAspecto).focus();
+
             return false;
         }else{
             enviar(idAspecto, contacto, descripcion, fecha);
             $(control).html(" <i class='fa fa-floppy-o' aria-hidden='true'></i> Guardar");
             $(control).removeAttr("disabled");
+            $('#myModal-' + idAspecto).modal('hide')
         }
     }
 
@@ -158,7 +167,8 @@
 
         $.ajax(settings).done(function (response) {
               console.log(response);
-              alert("Hemos recibido su respuesta.");
+              $("#listado-"+idAspecto).append("<li> <strong>Descripción: </strong> " + descripcion + " (" + fecha + ")" + "</li>");
+              alert("Agregado correctamente.");
         });
     }
 
