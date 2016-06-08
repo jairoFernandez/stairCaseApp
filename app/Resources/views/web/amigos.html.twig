@@ -13,8 +13,28 @@
 	<div class="col-lg-12">
 		<h3>Resultados:</h3>
 	</div>
-	<div id="resultados" class="col-lg-8">
+	<div id="resultados" class="col-lg-6">
 		<!--<a href="#" class="list-group-item"> Sin resultados</a>-->
+	</div>
+	<div id="amigos" class="col-lg-6">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>Nombres</th>
+					<th>Estado</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for amigo in amigos %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ amigo }}</td>
+					<td>{{ amigo.estado }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
 </div>
 {% endblock %}

@@ -32,7 +32,7 @@ class LoadData implements FixtureInterface, ContainerAwareInterface
 
         $userManager = $this->container->get('fos_user.user_manager');
 
-        for ($i=0; $i < 3; $i++) { 
+        for ($i=0; $i < 4; $i++) { 
             $user = $userManager->createUser();
             $user->setUsername('usuario_'.$i);
             $user->setEmail('usuario_'.$i);
@@ -42,26 +42,31 @@ class LoadData implements FixtureInterface, ContainerAwareInterface
             $user->setRoles(array('ROLE_USER'));
             // Update the user
             $userManager->updateUser($user, true);
+            //$manager->persist($user);
 
             $perfil = new Perfil();
             $primerNombre = "";
             $primerApellido = "";
             switch ($i) {
                 case 0:
-                    $primerNombre = "Andres";
-                    $primerApellido = "Perez";
-                    break;
+                $primerNombre = "Andres";
+                $primerApellido = "Perez";
+                break;
                 case 1:
-                    $primerNombre = "Mathias";
-                    $primerApellido = "Fernández";
-                    break;
+                $primerNombre = "Mathias";
+                $primerApellido = "Fernández";
+                break;
                 case 2:
-                    $primerNombre = "Alberto";
-                    $primerApellido = "Contreras";
-                    break;                
+                $primerNombre = "Alberto";
+                $primerApellido = "Contreras";
+                break; 
+                case 3:
+                $primerNombre = "Nataly";
+                $primerApellido = "Gil";
+                break;                
                 default:
                     # code...
-                    break;
+                break;
             }
 
             $perfil->setPrimerNombre($primerNombre);
@@ -70,21 +75,17 @@ class LoadData implements FixtureInterface, ContainerAwareInterface
             $perfil->setFechaNacimiento(new \DateTime());
             $perfil->setUsuario($user);
             $manager->persist($perfil);
+          
+            for ($j=0; $j<12; $j++){
+                $contacto = new Contacto();
+                $contacto->setPrimerApellido('Apellido '.$j);
+                $contacto->setPrimerNombre('Contacto '.$j);
+                $contacto->setTelefono('317 6569802');
+                $contacto->setUsuario($user);
+                $manager->persist($contacto);
+                
+            }
             $manager->flush();
-
-        }
-
-
-
-
-
-        for ($i=0; $i<12; $i++){
-            $contacto = new Contacto();
-            $contacto->setPrimerApellido('Apellido '.$i);
-            $contacto->setPrimerNombre('Contacto '.$i);
-            $contacto->setTelefono('317 6569802');
-            $contacto->setUsuario($user);
-            $manager->persist($contacto);
         }
 
         $ganar = new Escalera();
@@ -181,5 +182,5 @@ class LoadData implements FixtureInterface, ContainerAwareInterface
 
         $manager->flush();
 
-}
+    }
 }

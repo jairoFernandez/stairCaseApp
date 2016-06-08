@@ -33,9 +33,28 @@ class DefaultController extends Controller
     public function amigosAction()
     {
         // replace this example code with whatever you need
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
+        $perfil = $em->getRepository('AppBundle:Perfil')->findOneBy(array(
+            'usuario' => $user->getId()
+        ));
+
+        if($perfil == null){
+            $this->get('utilidades')->MsgFlash("Por favor completa tu perfil.","warning");
+            return $this->redirectToRoute('admin_show', array('id' => $user->getId()));
+        }
+
+        $amigosQuery = $em->createQuery('
+                SELECT am FROM AppBundle:Amistad am
+                    INNER JOIN am.solicitante s
+                    INNER JOIN am.amigo a
+                WHERE s.id = :id OR a.id = :id
+        ');
+        $amigosQuery->setParameter('id',$perfil->getId());
+        $amigos = $amigosQuery->getResult();
         return $this->render('web/amigos.html.twig', [
-
+            'amigos' => $amigos
             ]);
     }
 
