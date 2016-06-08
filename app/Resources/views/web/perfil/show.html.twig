@@ -1,0 +1,58 @@
+{% extends 'web/dashboard.html.twig' %}
+
+{% block body %}
+    <h1>Perfil</h1>
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Perfil Público</th>
+                <td>{% if perfil.publico %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Ministerio</th>
+                <td>{{ perfil.ministerio }}</td>
+            </tr>
+            <tr>
+                <th>Eslider</th>
+                <td>{% if perfil.esLider %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Primer nombre</th>
+                <td>{{ perfil.primerNombre }}</td>
+            </tr>
+            <tr>
+                <th>Segundo nombre</th>
+                <td>{{ perfil.segundoNombre }}</td>
+            </tr>
+            <tr>
+                <th>Primer apellido</th>
+                <td>{{ perfil.primerApellido }}</td>
+            </tr>
+            <tr>
+                <th>Segundo apellido</th>
+                <td>{{ perfil.segundoApellido }}</td>
+            </tr>
+            <tr>
+                <th>Teléfono</th>
+                <td>{{ perfil.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Fecha nacimiento</th>
+                <td>{% if perfil.fechaNacimiento %}{{ perfil.fechaNacimiento|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Última modificación</th>
+                <td>{% if perfil.fechaEdicion %}{{ perfil.fechaEdicion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecha registro</th>
+                <td>{% if perfil.fechaCreacion %}{{ perfil.fechaCreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+            <a href="{{ path('admin_profile_edit', { 'id': perfil.id }) }}" class="btn btn-warning"> Editar</a>
+            <a href="{{ path('fos_user_profile_show', { 'id': perfil.id }) }}" class="btn btn-info"> Datos seguridad</a>
+    
+{% endblock %}

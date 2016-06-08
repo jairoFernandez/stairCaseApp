@@ -148,52 +148,5 @@ class Amistad
         $this->setFechaSolicitud(new \DateTime()); 
         $this->setEstado(false);
     }
-
-    /**
-     * Set solicitante
-     *
-     * @param \AppBundle\Entity\Perfil $solicitante
-     *
-     * @return Amistad
-     */
-    public function setSolicitante(\AppBundle\Entity\Perfil $solicitante = null)
-    {
-        $this->solicitante = $solicitante;
-
-        return $this;
-    }
-
-    /**
-     * Get solicitante
-     *
-     * @return \AppBundle\Entity\Perfil
-     */
-    public function getSolicitante()
-    {
-        return $this->solicitante;
-    }
-
-    /**
-     * Set amigo
-     *
-     * @param \AppBundle\Entity\Perfil $amigo
-     *
-     * @return Amistad
-     */
-    public function setAmigo(\AppBundle\Entity\Perfil $amigo = null)
-    {
-        $this->amigo = $amigo;
-
-        return $this;
-    }
-
-    /**
-     * Get amigo
-     *
-     * @return \AppBundle\Entity\Perfil
-     */
-    public function getAmigo()
-    {
-        return $this->amigo;
-    }
 }
+

@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a href="{{ path('admin_index') }}">Contacto</a>
+    <script>
+        localStorage.setItem("menuLateral", "inicio-admin");
+    </script>
+    <a href="{{ path('inicio-admin') }}">ACCEDER</a>
 {% endblock %}

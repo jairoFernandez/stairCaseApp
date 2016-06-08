@@ -1,0 +1,59 @@
+{% extends 'web/dashboard.html.twig' %}
+
+{% block body %}
+    <h1>Perfil list</h1>
+
+    <table class="table table-list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Publico</th>
+                <th>Esliderdoce</th>
+                <th>Eslider</th>
+                <th>Primernombre</th>
+                <th>Segundonombre</th>
+                <th>Primerapellido</th>
+                <th>Segundoapellido</th>
+                <th>Telefono</th>
+                <th>Fechanacimiento</th>
+                <th>Fechaedicion</th>
+                <th>Fechacreacion</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for perfil in perfils %}
+            <tr>
+                <td><a href="{{ path('admin_profile_show', { 'id': perfil.id }) }}">{{ perfil.id }}</a></td>
+                <td>{% if perfil.publico %}Yes{% else %}No{% endif %}</td>
+                <td>{% if perfil.esLiderDoce %}Yes{% else %}No{% endif %}</td>
+                <td>{% if perfil.esLider %}Yes{% else %}No{% endif %}</td>
+                <td>{{ perfil.primerNombre }}</td>
+                <td>{{ perfil.segundoNombre }}</td>
+                <td>{{ perfil.primerApellido }}</td>
+                <td>{{ perfil.segundoApellido }}</td>
+                <td>{{ perfil.telefono }}</td>
+                <td>{% if perfil.fechaNacimiento %}{{ perfil.fechaNacimiento|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if perfil.fechaEdicion %}{{ perfil.fechaEdicion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if perfil.fechaCreacion %}{{ perfil.fechaCreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_profile_show', { 'id': perfil.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_profile_edit', { 'id': perfil.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_profile_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

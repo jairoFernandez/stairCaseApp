@@ -4,6 +4,8 @@ namespace AppBundle\Controller\Web;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Default controller.
@@ -16,13 +18,13 @@ class DefaultController extends Controller
      /**
      * @Route("/", name="inicio-admin")
      */
-    public function inicioAction()
-    {
+     public function inicioAction()
+     {
         // replace this example code with whatever you need
-        
+
         return $this->render('web/index.html.twig', [
-            
-        ]);
+
+            ]);
     }
 
     /**
@@ -31,56 +33,38 @@ class DefaultController extends Controller
     public function amigosAction()
     {
         // replace this example code with whatever you need
-        
+
         return $this->render('web/amigos.html.twig', [
-            
-        ]);
+
+            ]);
     }
 
        /**
-     * [AgregarDetalle description]
-     * @Route("/buscar", name="buscarContactos")
-     * @Method("POST")
-     */
-    public function AgregarDetalle(Request $request)
-    {
-        $nombres = $request->request->get('idAspecto');
-        $idContacto = $request->request->get('idContacto');
-        $descripcion = $request->request->get('descripcion');
-        $fechaRecibida = $request->request->get('fecha');
-        $fecha = date_create_from_format('Y-m-d', $fechaRecibida);
+         * @Route("/buscar-contactos/{nombres}", name="buscarContactos")
+         * @Method("GET")
+       */
+       public function buscarContactosAction($nombres)
+       {
+        $nombreBuscado = $nombres;
+        
         $mensajePeticion = "";
-        $codigo = "201";       
+        $codigo = "200";       
 
         $em = $this->getDoctrine()->getManager();
-        $contacto = $em->getRepository('AppBundle:Contacto')->findOneBy(array(
-            'id' => $idContacto,
-            'usuario' => $this->getUser()->getId()
-            ));
-
-        $aspecto = $em->getRepository('AppBundle:EscaleraAspectos')->findOneBy(array(
-            'id'=>$idAspecto
-            ));
-
-        $contactoEscalera = new ContactoEscalera();         
-       
-        if($contacto == null || $contacto == ""){
-            $mensajePeticion = "Este contacto no le pertenece. ";
-            $codigo = "500";
-        }else{   
-            $contactoEscalera->setAspecto($aspecto);
-            $contactoEscalera->setContacto($contacto);
-            $contactoEscalera->setFecha($fecha);
-            $contactoEscalera->setDescripcion($descripcion);
-           
-            $em->persist($contactoEscalera);
-            $em->flush();
-        }
+        
+        $result = $em->getRepository("AppBundle:Perfil")->createQueryBuilder('p')
+               ->where('p.primerNombre LIKE :nombres')
+               ->orWhere('p.segundoNombre LIKE :nombres')
+               ->orWhere('p.primerApellido LIKE :nombres')
+               ->orWhere('p.segundoApellido LIKE :nombres')
+               ->setParameter('nombres', '%'.$nombreBuscado.'%')
+               ->getQuery()
+               ->getArrayResult();
 
         $response = new JsonResponse();
-
+        
         $response->setData(array(
-            'DetalleAgregado' => "Asignación correcta. ",
+            'Resultados' => $result,
             'codigo'=> $codigo
             ));
 

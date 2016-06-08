@@ -1,0 +1,12 @@
+{% extends 'web/dashboard.html.twig' %}
+
+{% block body %}
+    <h1>Editar mi Perfil</h1>
+
+    {{ form_start(edit_form) }}
+        {{ form_widget(edit_form) }}
+        <input type="submit" value="Editar" class="btn btn-success" />
+    {{ form_end(edit_form) }}
+
+            <a href="{{ path('admin_profile_index') }}">Volver</a>
+{% endblock %}

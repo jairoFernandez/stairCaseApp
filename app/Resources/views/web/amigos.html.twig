@@ -1,17 +1,63 @@
 {% extends 'web/dashboard.html.twig' %}
 
 {% block body %}
+<div class="row">
 	<div class="col-lg-6">
-		<input type="search" placeholder="Buscar amigos..." class="form-control">
+		<div class="input-group">
+			<input type="text" class="form-control" id="busqueda" placeholder="Digita el nombre de un amigo..." autofocus="autofocus"> 
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button" id="btnBuscar">Buscar!</button>
+			</span>
+		</div><!-- /input-group -->
 	</div>
-	<hr>
-	<div id="resultados list-group">
-		  <a href="#" class="list-group-item"> Sin resultados</a>
+	<div class="col-lg-12">
+		<h3>Resultados:</h3>
 	</div>
+	<div id="resultados" class="col-lg-8">
+		<!--<a href="#" class="list-group-item"> Sin resultados</a>-->
+	</div>
+</div>
 {% endblock %}
 {% block javascripts %}
-	{{ parent() }}
-	<script type="text/javascript">
-		
-	</script>
+{{ parent() }}
+<script type="text/javascript">
+	$("#btnBuscar").click(function(event){
+		event.preventDefault();
+		buscar();
+		$("#busqueda").focus();
+	})
+
+	function buscar(){
+		$('#resultados').html("");
+
+		var nombreBuscado =  $("#busqueda").val();
+		var ruta = "{{ path('buscarContactos', {'nombres': 'nombreBuscado' }) }}";
+		ruta = ruta.replace("nombreBuscado", nombreBuscado);
+		var settings = {
+			"url": ruta,
+			"method": "GET"
+		}
+
+		$.ajax(settings).done(function (response) {
+			response.Resultados.forEach(function(item){
+				var primerNombre = item.primerNombre;
+				var segundoNombre = item.segundoNombre;
+				var primerApellido = item.primerApellido;
+				var segundoApellido = item.segundoApellido;
+
+				if(segundoNombre == null)
+					segundoNombre = "";
+				if(segundoApellido == null)
+					segundoApellido = "";
+
+				$('#resultados').append("<a href='#' onclick='AgregarAmigo("+item.id+")' href='' id='"+ item.id +"' class='list-group-item'>"+ primerNombre + " " + segundoNombre + " " + primerApellido + " " + segundoApellido + "</a>");
+			})
+		});
+	}
+
+	function AgregarAmigo(id){
+		alert("Has agregado a " + id);		
+		return false;
+	}
+</script>
 {% endblock %}
