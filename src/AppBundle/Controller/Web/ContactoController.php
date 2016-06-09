@@ -75,10 +75,19 @@ class ContactoController extends Controller
      */
     public function showAction(Contacto $contacto)
     {
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();        
         $deleteForm = $this->createDeleteForm($contacto);
         $pasos = $em->getRepository('AppBundle:Escalera')->findAll();
-        $datos = $em->getRepository('AppBundle:ContactoEscalera')->findBy(array(
+
+        $usuarioContacto = $contacto->getUsuario();
+
+        if($usuarioContacto->getId() != $user->getId()){
+            $this->get('utilidades')->MsgFlash("Hmmmm este contacto no es tuyo.", "danger");
+            return $this->redirectToRoute('admin_index');
+        }
+
+        $datos = $em->getRepository('AppBundle:ContactoEscalera')->findOneBy(array(
             'contacto' => $contacto->getId()
         ));
         //dump($datos);
@@ -102,6 +111,13 @@ class ContactoController extends Controller
         $deleteForm = $this->createDeleteForm($contacto);
         $editForm = $this->createForm('AppBundle\Form\ContactoType', $contacto);
         $editForm->handleRequest($request);
+        $user = $this->getUser();        
+        $usuarioContacto = $contacto->getUsuario();
+
+        if($usuarioContacto->getId() != $user->getId()){
+            $this->get('utilidades')->MsgFlash("Hmmmm este contacto no es tuyo, que estás tratando de hacer???.", "danger");
+            return $this->redirectToRoute('admin_index');
+        }
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();

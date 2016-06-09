@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Entity\Amistad;
 
 /**
  * Default controller.
@@ -38,7 +39,7 @@ class DefaultController extends Controller
 
         $perfil = $em->getRepository('AppBundle:Perfil')->findOneBy(array(
             'usuario' => $user->getId()
-        ));
+            ));
 
         if($perfil == null){
             $this->get('utilidades')->MsgFlash("Por favor completa tu perfil.","warning");
@@ -46,11 +47,11 @@ class DefaultController extends Controller
         }
 
         $amigosQuery = $em->createQuery('
-                SELECT am FROM AppBundle:Amistad am
-                    INNER JOIN am.solicitante s
-                    INNER JOIN am.amigo a
-                WHERE s.id = :id OR a.id = :id
-        ');
+            SELECT am FROM AppBundle:Amistad am
+            INNER JOIN am.solicitante s
+            INNER JOIN am.amigo a
+            WHERE s.id = :id OR a.id = :id
+            ');
         $amigosQuery->setParameter('id',$perfil->getId());
         $amigos = $amigosQuery->getResult();
         return $this->render('web/amigos.html.twig', [
@@ -58,12 +59,12 @@ class DefaultController extends Controller
             ]);
     }
 
-       /**
-         * @Route("/buscar-contactos/{nombres}", name="buscarContactos")
-         * @Method("GET")
-       */
-       public function buscarContactosAction($nombres)
-       {
+    /**
+     * @Route("/buscar-contactos/{nombres}", name="buscarContactos")
+     * @Method("GET")
+    */
+    public function buscarContactosAction($nombres)
+    {
         $nombreBuscado = $nombres;
         
         $mensajePeticion = "";
@@ -72,13 +73,13 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $result = $em->getRepository("AppBundle:Perfil")->createQueryBuilder('p')
-               ->where('p.primerNombre LIKE :nombres')
-               ->orWhere('p.segundoNombre LIKE :nombres')
-               ->orWhere('p.primerApellido LIKE :nombres')
-               ->orWhere('p.segundoApellido LIKE :nombres')
-               ->setParameter('nombres', '%'.$nombreBuscado.'%')
-               ->getQuery()
-               ->getArrayResult();
+        ->where('p.primerNombre LIKE :nombres')
+        ->orWhere('p.segundoNombre LIKE :nombres')
+        ->orWhere('p.primerApellido LIKE :nombres')
+        ->orWhere('p.segundoApellido LIKE :nombres')
+        ->setParameter('nombres', '%'.$nombreBuscado.'%')
+        ->getQuery()
+        ->getArrayResult();
 
         $response = new JsonResponse();
         
@@ -90,5 +91,17 @@ class DefaultController extends Controller
         $response->setStatusCode($codigo);
         return $response;
 
+    }
+
+    /**
+    * @Route("/agregar-amigos/{id}", name="agregar-amigos")
+    * @Method("POST")
+    */
+    public function agregarContactosAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $amigo = new Amistad();
+        $solicitante = $this->getUser();
+        $amigo = $em->getRepository('AppBundle:')
     }
 }
