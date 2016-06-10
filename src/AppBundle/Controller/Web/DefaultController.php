@@ -93,15 +93,15 @@ class DefaultController extends Controller
 
     }
 
-    /**
-    * @Route("/agregar-amigos/{id}", name="agregar-amigos")
-    * @Method("POST")
-    */
-    public function agregarContactosAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $amigo = new Amistad();
-        $solicitante = $this->getUser();
-        $amigo = $em->getRepository('AppBundle:')
-    }
+    // /**
+    // * @Route("/agregar-amigos/{id}", name="agregar-amigos")
+    // * @Method("POST")
+    // */
+    // public function agregarContactosAction($id)
+    // {
+    //     $em = $this->getDoctrine()->getManager();
+    //     $amigo = new Amistad();
+    //     $solicitante = $this->getUser();
+    //     $amigo = $em->getRepository('AppBundle:')
+    // }
 }
