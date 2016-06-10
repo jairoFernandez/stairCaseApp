@@ -39,38 +39,5 @@ class Usuario extends BaseUser
     {
         return $this->id;
     }
-
-    /**
-     * Add amistad
-     *
-     * @param \AppBundle\Entity\AmistadUsuario $amistad
-     *
-     * @return Usuario
-     */
-    public function addAmistad(\AppBundle\Entity\AmistadUsuario $amistad)
-    {
-        $this->amistad[] = $amistad;
-
-        return $this;
-    }
-
-    /**
-     * Remove amistad
-     *
-     * @param \AppBundle\Entity\AmistadUsuario $amistad
-     */
-    public function removeAmistad(\AppBundle\Entity\AmistadUsuario $amistad)
-    {
-        $this->amistad->removeElement($amistad);
-    }
-
-    /**
-     * Get amistad
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAmistad()
-    {
-        return $this->amistad;
-    }
 }
+

@@ -6,7 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
 use AppBundle\Entity\Amistad;
+use AppBundle\Entity\AmistadUsuario;
 
 /**
  * Default controller.
@@ -22,10 +24,19 @@ class DefaultController extends Controller
      public function inicioAction()
      {
         // replace this example code with whatever you need
-
+        $em = $this->getDoctrine()->getManager();
+        $detallesQuery = $em->createQuery('
+            SELECT a, c FROM AppBundle:ContactoEscalera a
+            JOIN a.contacto c
+            JOIN c.usuario u
+            JOIN u.amistad am
+            WHERE am.usuario = :usuarioId AND am.estado = true
+            ');
+        $detallesQuery->setParameter('usuarioId', $this->getUser()->getId());
+        $detalles = $detallesQuery->getResult();
         return $this->render('web/index.html.twig', [
-
-            ]);
+            'detalles' => $detalles
+        ]);
     }
 
     /**
@@ -93,15 +104,59 @@ class DefaultController extends Controller
 
     }
 
-    // /**
-    // * @Route("/agregar-amigos/{id}", name="agregar-amigos")
-    // * @Method("POST")
-    // */
-    // public function agregarContactosAction($id)
-    // {
-    //     $em = $this->getDoctrine()->getManager();
-    //     $amigo = new Amistad();
-    //     $solicitante = $this->getUser();
-    //     $amigo = $em->getRepository('AppBundle:')
-    // }
+    /**
+    * @Route("/agregar-amigos/{id}", name="agregar-amigos")
+    * @Method("POST")
+    */
+    public function agregarContactosAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $amigo = new Amistad();
+        $solicitante = $this->getUser();
+        $miPerfil = $em->getRepository('AppBundle:Perfil')->findOneBy(array(
+            'usuario'=>$solicitante->getId()
+            ));
+        $amigo = $em->getRepository('AppBundle:Perfil')->findOneById($id);
+
+        $mensajePeticion = "";
+        $codigo = "201";    
+
+        $comprobarAmistad = $em->getRepository('AppBundle:Amistad')->findOneBy(array(
+            'solicitante' => $solicitante->getId(),
+            'amigo' => $miPerfil->getId()
+            ));
+
+        if($comprobarAmistad == null){
+            $amistad = new Amistad();
+            $amistad->setSolicitante($miPerfil);
+            $amistad->setAmigo($amigo);
+
+            $em->persist($amistad);
+
+            $amistadUsuario = new AmistadUsuario();
+            $amistadUsuario->setUsuario($solicitante);
+            $amistadUsuario->setAmigo($amigo);
+            $amistadUsuario->setEstado(false);
+            $em->persist($amistadUsuario);
+
+            $em->flush();
+
+
+            $mensajePeticion = $amistad;
+        }else{
+            $mensajePeticion = "Ya tiene una solicitud con este amigo.";
+            $codigo = "200";
+        }
+
+        $response = new JsonResponse();
+        
+        $response->setData(array(
+            'Resultados' => $mensajePeticion,
+            'codigo'=> $codigo
+            ));
+
+        $response->setStatusCode($codigo);
+        return $response;
+
+    }
 }

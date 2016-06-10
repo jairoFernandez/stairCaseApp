@@ -196,4 +196,9 @@ class Amistad
     {
         return $this->amigo;
     }
+
+    public function __toString()
+    {
+        return $this->getAmigo()->getPrimerNombre()." ".$this->getAmigo()->getPrimerNombre();
+    }
 }

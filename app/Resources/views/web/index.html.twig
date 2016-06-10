@@ -1,36 +1,41 @@
 {% extends 'web/dashboard.html.twig' %}
 
 {% block body %}
-	<div class="container col-lg-12">
-    <div class="page-header">
-        <h1 id="timeline">Social</h1>
-    </div>
-    <ul class="timeline">
-        <li>
-          <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-              <h4 class="timeline-title">Mussum ipsum cacilds</h4>
-              <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> 11 hours ago via Twitter</small></p>
-            </div>
-            <div class="timeline-body">
-              <p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. </p>
-            </div>
-          </div>
-        </li>
-        <li class="timeline-inverted">
-          <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i></div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-              <h4 class="timeline-title">Mussum ipsum cacilds</h4>
-            </div>
-            <div class="timeline-body">
-              <p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis.</p>
-              <p>Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. </p>
-            </div>
-          </div>
-        </li>
-        
-    </ul>
+<div class="container col-lg-12">
+  <div class="page-header">
+    <h1 id="timeline">Social</h1>
+  </div>
+  <ul class="timeline">
+
+    {% for detalle in detalles %}
+
+    <li {% if loop.index is odd %}class="timeline-inverted"{% endif %}>
+      <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i></div>
+      <div class="timeline-panel">
+        <div class="timeline-heading">
+          <h4 class="timeline-title"></h4>
+        </div>
+        <div class="timeline-body">
+          <p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis.</p>
+          <p>Suco de cevadiss, é um leite divinis, qui tem lupuliz, matis, aguis e fermentis. Interagi no mé, cursus quis, vehicula ac nisi. </p>
+        </div>
+      </div>
+    </li>
+
+    {% else %}
+    <li>
+      <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
+      <div class="timeline-panel">
+        <div class="timeline-heading">
+          <h4 class="timeline-title">No hay noticias</h4>
+          <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> 11 hours ago via Twitter</small></p>
+        </div>
+        <div class="timeline-body">
+          <p>Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. </p>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
 </div>
 {% endblock %}

@@ -64,6 +64,13 @@ class Perfil extends Persona
      */
     private $esLider;
 
+
+    /**
+     * @var Array
+     * @ORM\OneToMany(targetEntity="AmistadUsuario", mappedBy="amigo")
+     */
+    private $amistad;
+
     /**
      * Get id
      *
@@ -221,5 +228,48 @@ class Perfil extends Persona
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+  
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->amistad = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add amistad
+     *
+     * @param \AppBundle\Entity\AmistadUsuario $amistad
+     *
+     * @return Perfil
+     */
+    public function addAmistad(\AppBundle\Entity\AmistadUsuario $amistad)
+    {
+        $this->amistad[] = $amistad;
+
+        return $this;
+    }
+
+    /**
+     * Remove amistad
+     *
+     * @param \AppBundle\Entity\AmistadUsuario $amistad
+     */
+    public function removeAmistad(\AppBundle\Entity\AmistadUsuario $amistad)
+    {
+        $this->amistad->removeElement($amistad);
+    }
+
+    /**
+     * Get amistad
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAmistad()
+    {
+        return $this->amistad;
     }
 }

@@ -22,7 +22,7 @@
 				<tr>
 					<th>No.</th>
 					<th>Nombres</th>
-					<th>Estado</th>
+					<th>Solicitud</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -30,7 +30,7 @@
 				<tr>
 					<td>{{ loop.index }}</td>
 					<td>{{ amigo }}</td>
-					<td>{{ amigo.estado }}</td>
+					<td>{% if amigo.estado == false %} <a class="btn btn-danger btn-xs"> <i class="fa fa-plus"></i> Pendiente</a>{% else %} <a class="btn btn-success btn-xs"> <i class="fa fa-plus"></i> Aceptada</a>{% endif %}</td>
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -76,8 +76,19 @@
 	}
 
 	function AgregarAmigo(id){
-		alert("Has agregado a " + id);		
-		return false;
+		if(confirm("¿Estás seguro de enviar la invitación a este contacto?")){
+			var rutaAgregar = "{{ path('agregar-amigos', { 'id': 'nuevo-amigo' }) }}";
+			rutaAgregar = rutaAgregar.replace('nuevo-amigo',id);
+			var settingsAgregar = {
+				"url": rutaAgregar,
+				"method": "POST"
+			}
+			$.ajax(settingsAgregar).done(function (response) {
+
+				alert("Agregado!!!");
+				location.reload();
+			})
+		}		
 	}
 </script>
 {% endblock %}

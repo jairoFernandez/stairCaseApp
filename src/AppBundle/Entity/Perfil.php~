@@ -46,23 +46,30 @@ class Perfil extends Persona
     /**
      * @var bool
      *
-     * @ORM\Column(name="publico", type="boolean")
+     * @ORM\Column(name="publico", type="boolean", nullable=true)
      */
     private $publico;
 
     /**
      * [$esLiderDoce description]
      * @var boolean
-     * @ORM\Column(name="esLiderDoce", type="boolean")
+     * @ORM\Column(name="esLiderDoce", type="boolean", nullable=true)
      */
     private $esLiderDoce;
 
     /**
      * [$esLiderDoce description]
      * @var boolean
-     * @ORM\Column(name="esLider", type="boolean")
+     * @ORM\Column(name="esLider", type="boolean", nullable=true)
      */
     private $esLider;
+
+
+    /**
+     * @var Array
+     * @ORM\OneToMany(targetEntity="AmistadUsuario", mappedBy="amigo")
+     */
+    private $amistad;
 
     /**
      * Get id
@@ -198,4 +205,30 @@ class Perfil extends Persona
     {
         return $this->liderInmediato;
     }
+
+    /**
+     * Set usuario
+     *
+     * @param \AppBundle\Entity\Usuario $usuario
+     *
+     * @return Perfil
+     */
+    public function setUsuario(\AppBundle\Entity\Usuario $usuario = null)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return \AppBundle\Entity\Usuario
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+  
 }
