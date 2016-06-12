@@ -25,7 +25,7 @@ class Perfil extends Persona
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Usuario")
+     * @ORM\ManyToOne(targetEntity="Usuario", inversedBy="perfil")
      */
     private $usuario;
 

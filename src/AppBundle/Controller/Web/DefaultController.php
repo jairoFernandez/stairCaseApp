@@ -25,14 +25,18 @@ class DefaultController extends Controller
      {
         // replace this example code with whatever you need
         $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+       
         $detallesQuery = $em->createQuery('
-            SELECT a, c FROM AppBundle:ContactoEscalera a
-            JOIN a.contacto c
-            JOIN c.usuario u
-            JOIN u.amistad am
-            WHERE am.usuario = :usuarioId AND am.estado = true
+            SELECT a,c,asp,u,p FROM AppBundle:ContactoEscalera a
+                JOIN a.contacto c
+                JOIN a.aspecto asp
+                JOIN c.usuario u
+                JOIN u.perfil p
+                JOIN p.amistad am
+            WHERE am.usuario = :usuarioId and am.estado = 1
             ');
-        $detallesQuery->setParameter('usuarioId', $this->getUser()->getId());
+        $detallesQuery->setParameter('usuarioId', $user->getId());
         $detalles = $detallesQuery->getResult();
         return $this->render('web/index.html.twig', [
             'detalles' => $detalles

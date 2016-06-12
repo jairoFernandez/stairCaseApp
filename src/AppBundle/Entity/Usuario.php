@@ -31,6 +31,12 @@ class Usuario extends BaseUser
     private $amistad;
 
     /**
+     * @var Array
+     * @ORM\OneToMany(targetEntity="Perfil", mappedBy="usuario")
+     */
+    private $perfil;
+
+    /**
      * Get id
      *
      * @return int
@@ -72,5 +78,39 @@ class Usuario extends BaseUser
     public function getAmistad()
     {
         return $this->amistad;
+    }
+
+    /**
+     * Add perfil
+     *
+     * @param \AppBundle\Entity\Perfil $perfil
+     *
+     * @return Usuario
+     */
+    public function addPerfil(\AppBundle\Entity\Perfil $perfil)
+    {
+        $this->perfil[] = $perfil;
+
+        return $this;
+    }
+
+    /**
+     * Remove perfil
+     *
+     * @param \AppBundle\Entity\Perfil $perfil
+     */
+    public function removePerfil(\AppBundle\Entity\Perfil $perfil)
+    {
+        $this->perfil->removeElement($perfil);
+    }
+
+    /**
+     * Get perfil
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPerfil()
+    {
+        return $this->perfil;
     }
 }
