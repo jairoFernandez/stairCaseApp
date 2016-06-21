@@ -64,7 +64,6 @@ class Perfil extends Persona
      */
     private $esLider;
 
-
     /**
      * @var Array
      * @ORM\OneToMany(targetEntity="AmistadUsuario", mappedBy="amigo")

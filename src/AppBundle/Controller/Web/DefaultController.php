@@ -80,20 +80,30 @@ class DefaultController extends Controller
     */
     public function buscarContactosAction($nombres)
     {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+
+        $perfil = $em->getRepository('AppBundle:Perfil')->findOneBy(array(
+            'usuario' => $user->getId()
+            ));
+
         $nombreBuscado = $nombres;
         
         $mensajePeticion = "";
         $codigo = "200";       
-
-        $em = $this->getDoctrine()->getManager();
         
-        $result = $em->getRepository("AppBundle:Perfil")->createQueryBuilder('p')
-        ->where('p.primerNombre LIKE :nombres')
-        ->orWhere('p.segundoNombre LIKE :nombres')
-        ->orWhere('p.primerApellido LIKE :nombres')
-        ->orWhere('p.segundoApellido LIKE :nombres')
+        $result = $em->createQuery('
+            SELECT p FROM AppBundle:Perfil p  
+            WHERE p.id <> :usuario 
+                AND (
+                p.primerNombre LIKE :nombres OR 
+                p.segundoNombre LIKE :nombres OR
+                p.primerApellido LIKE :nombres OR
+                p.segundoApellido LIKE :nombres)
+            
+        ')
         ->setParameter('nombres', '%'.$nombreBuscado.'%')
-        ->getQuery()
+        ->setParameter('usuario', $perfil->getId())
         ->getArrayResult();
 
         $response = new JsonResponse();
