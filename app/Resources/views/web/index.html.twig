@@ -3,22 +3,22 @@
 {% block body %}
 <div class="container col-lg-12">
   <div class="page-header">
-    <h3 id="timeline">Hola {{ app.user.perfil[0] }}, esto es lo último que ha pasado.</h3>
+    <h3 id="timeline">Hola {% if is_granted('ROLE_SUPER_ADMIN') %}
+                       {{ app.user }}
+                    {% else %}
+                        {{ app.user.perfil[0] }}
+                    {% endif %} esto es lo último que ha pasado.</h3>
   </div>
   <ul class="timeline">
 
     {% for detalle in detalles %}
 
     <li {% if loop.index is odd %}class="timeline-inverted"{% endif %}>
-      {% if loop.index is odd %}
-      <div class="timeline-badge success">
-        <i class="fa fa-users"></i>   
+      
+      <div class="timeline-badge {{ detalle.aspecto.pasoEscalera.color }}">
+        <i class="{{ detalle.aspecto.pasoEscalera.icono }}"></i>   
       </div>
-      {% else %}
-       <div class="timeline-badge info">
-        <i class="fa fa-dashboard"></i>  
-      </div>
-      {% endif %} 
+      
       <div class="timeline-panel">
         <div class="timeline-heading">
           <h4 class="timeline-title">{{ detalle.aspecto }}</h4>

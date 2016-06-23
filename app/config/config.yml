@@ -78,6 +78,7 @@ easy_admin:
         - AppBundle\Entity\AmistadUsuario
         - AppBundle\Entity\Contacto
         - AppBundle\Entity\ContactoEscalera
+        - AppBundle\Entity\Escalera
         - AppBundle\Entity\EscaleraAspectos
         - AppBundle\Entity\Perfil
         - AppBundle\Entity\Usuario

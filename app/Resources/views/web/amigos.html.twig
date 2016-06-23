@@ -44,6 +44,7 @@
 					<th>No.</th>
 					<th>Nombres</th>
 					<th>Solicitud</th>
+					<th>Público</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -52,10 +53,11 @@
 					<td>{{ loop.index }}</td>
 					<td>{{ amigo }}</td>
 					<td>{% if amigo.estado == false %} <a class="btn btn-danger btn-xs"> <i class="fa fa-plus"></i> Pendiente</a>{% else %} <a class="btn btn-success btn-xs"> <i class="fa fa-plus"></i> Aceptada</a>{% endif %}</td>
+					<td>{% if amigo.amigo.publico == true %}Sí{% else %}No{% endif %}</td>
 				</tr>
 				{% else %}
 				<tr>
-					<td colspan="3">Aún no tienes amigos.</td>					
+					<td colspan="4">Aún no tienes amigos.</td>					
 				</tr>
 				{% endfor %}
 			</tbody>

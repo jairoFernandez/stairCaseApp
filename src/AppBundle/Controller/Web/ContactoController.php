@@ -87,10 +87,10 @@ class ContactoController extends Controller
             return $this->redirectToRoute('admin_index');
         }
 
-        $datos = $em->getRepository('AppBundle:ContactoEscalera')->findOneBy(array(
+        $datos = $em->getRepository('AppBundle:ContactoEscalera')->findBy(array(
             'contacto' => $contacto->getId()
         ));
-        //dump($datos);
+        dump($datos);
 
         return $this->render('web/contacto/show.html.twig', array(
             'contacto' => $contacto,

@@ -51,6 +51,20 @@ class Escalera
     private $fechaEdicion;
 
     /**
+     * [$color description]
+     * @var [type]
+     * @ORM\Column(name="color", type="string", length=255, nullable=true)
+     */
+    private $color;
+
+    /**
+     * [$color description]
+     * @var [type]
+     * @ORM\Column(name="icono", type="string", length=255, nullable=true)
+     */
+    private $icono;
+
+    /**
      * [$aspectos description]
      * @var Array
      * @ORM\OneToMany(targetEntity="EscaleraAspectos", mappedBy="pasoEscalera")
@@ -224,5 +238,53 @@ class Escalera
     public function getAspectos()
     {
         return $this->aspectos;
+    }
+
+    /**
+     * Set color
+     *
+     * @param string $color
+     *
+     * @return Escalera
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set icono
+     *
+     * @param string $icono
+     *
+     * @return Escalera
+     */
+    public function setIcono($icono)
+    {
+        $this->icono = $icono;
+
+        return $this;
+    }
+
+    /**
+     * Get icono
+     *
+     * @return string
+     */
+    public function getIcono()
+    {
+        return $this->icono;
     }
 }

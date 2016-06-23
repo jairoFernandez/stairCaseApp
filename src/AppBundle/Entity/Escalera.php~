@@ -51,6 +51,20 @@ class Escalera
     private $fechaEdicion;
 
     /**
+     * [$color description]
+     * @var [type]
+     * @ORM\Column(name="color", type="string", length=255, nullable=true)
+     */
+    private $color;
+
+    /**
+     * [$color description]
+     * @var [type]
+     * @ORM\Column(name="icono", type="string", length=255, nullable=true)
+     */
+    private $icono;
+
+    /**
      * [$aspectos description]
      * @var Array
      * @ORM\OneToMany(targetEntity="EscaleraAspectos", mappedBy="pasoEscalera")
@@ -184,5 +198,45 @@ class Escalera
     {
         return $this->getNombre();;
     }
-}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->aspectos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
+    /**
+     * Add aspecto
+     *
+     * @param \AppBundle\Entity\EscaleraAspectos $aspecto
+     *
+     * @return Escalera
+     */
+    public function addAspecto(\AppBundle\Entity\EscaleraAspectos $aspecto)
+    {
+        $this->aspectos[] = $aspecto;
+
+        return $this;
+    }
+
+    /**
+     * Remove aspecto
+     *
+     * @param \AppBundle\Entity\EscaleraAspectos $aspecto
+     */
+    public function removeAspecto(\AppBundle\Entity\EscaleraAspectos $aspecto)
+    {
+        $this->aspectos->removeElement($aspecto);
+    }
+
+    /**
+     * Get aspectos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAspectos()
+    {
+        return $this->aspectos;
+    }
+}

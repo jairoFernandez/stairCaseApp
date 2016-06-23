@@ -1,17 +1,37 @@
 {% extends 'web/dashboard.html.twig' %}
 
 {% block body %}
-    <script>
-        localStorage.setItem("menuLateral", "admin-contactos");
-    </script> 
-    <h1>Contacto list</h1>
-    <div class="col-lg-4">
-        <a href="{{ path('admin_new') }}">Crear nuevo</a>
+<script>
+    localStorage.setItem("menuLateral", "admin-contactos");
+</script> 
+<h1>Listado de Contactos</h1>
+<div class="col-lg-8">
+    <a href="{{ path('admin_new') }}" class="btn btn-success">Agregar</a>
+    <hr>
     <div class="list-group">
         {% for contacto in contactos %}
-            <a href="{{ path('admin_show', { 'id': contacto.id  }) }}" class="list-group-item">  <span class="badge">{{ contacto.telefono }}</span> {{ contacto.primerNombre }} {{ contacto.primerApellido }}</a>
+        <a  class="list-group-item"> 
+        
+            <span class="badge btn btn-success" style="z-index: 1000;" onclick="redireccionar('{{ path('admin_show', { 'id': contacto.id  }) }}');">
+
+                <i class="fa fa-search"></i> Ver 
+
+            </span> 
+            <span class="badge">{{ contacto.telefono }}</span> 
+            {{ contacto.primerNombre }} {{ contacto.primerApellido }}
+        </a>
         {% endfor %}
     </div>
 
-    </div>
+</div>
+{% endblock %}
+{% block javascripts  %}
+<script>
+
+    function redireccionar(pagina) 
+    {
+        location.href=pagina
+    } 
+
+</script>
 {% endblock %}

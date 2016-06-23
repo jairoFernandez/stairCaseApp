@@ -102,21 +102,29 @@ class LoadData implements FixtureInterface, ContainerAwareInterface
         $ganar = new Escalera();
         $ganar->setNombre('Ganar');
         $ganar->setDescripcion('Proceso inicial...');
+        $ganar->setColor('primary');
+        $ganar->setIcono('fa fa-users');
         $ganar->setFecha(new \DateTime());
 
         $consolidar = new Escalera();
         $consolidar->setNombre('Consolidar');
         $consolidar->setDescripcion('Proceso inicial...');
+        $consolidar->setColor('warning');
+        $consolidar->setIcono('fa fa-bar-chart');
         $consolidar->setFecha(new \DateTime());
 
         $discipular = new Escalera();
         $discipular->setNombre('Discipular');
         $discipular->setDescripcion('Proceso formación en capacitación destino...');
+        $discipular->setIcono('fa fa-graduation-cap');
+        $discipular->setColor('info');
         $discipular->setFecha(new \DateTime());
 
         $enviar = new Escalera();
         $enviar->setNombre('Enviar');
         $enviar->setDescripcion('Abrir célula.');
+        $enviar->setColor('success');
+        $enviar->setIcono('fa fa-star');
         $enviar->setFecha(new \DateTime());
 
         $manager->persist($ganar);
