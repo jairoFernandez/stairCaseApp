@@ -90,7 +90,7 @@ class ContactoController extends Controller
         $datos = $em->getRepository('AppBundle:ContactoEscalera')->findBy(array(
             'contacto' => $contacto->getId()
         ));
-        dump($datos);
+       
 
         return $this->render('web/contacto/show.html.twig', array(
             'contacto' => $contacto,
