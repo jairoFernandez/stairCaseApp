@@ -32,6 +32,16 @@ class LoadData implements FixtureInterface, ContainerAwareInterface
 
         $userManager = $this->container->get('fos_user.user_manager');
 
+        $superAdmin = $userManager->createUser();
+        $superAdmin->setUsername('super');
+        $superAdmin->setEmail('usuario');
+        $superAdmin->setPlainPassword('123456');
+            //$user->setPassword('3NCRYPT3D-V3R51ON');
+        $superAdmin->setEnabled(true);
+        $superAdmin->setRoles(array('ROLE_SUPER_ADMIN'));
+            // Update the user
+        $userManager->updateUser($superAdmin, true);
+
         for ($i=0; $i < 4; $i++) { 
             $user = $userManager->createUser();
             $user->setUsername('usuario_'.$i);
@@ -74,8 +84,9 @@ class LoadData implements FixtureInterface, ContainerAwareInterface
             $perfil->setTelefono("12312");
             $perfil->setFechaNacimiento(new \DateTime());
             $perfil->setUsuario($user);
+            $perfil->setPublico(true);
             $manager->persist($perfil);
-          
+
             for ($j=0; $j<12; $j++){
                 $contacto = new Contacto();
                 $contacto->setPrimerApellido('Apellido '.$j);

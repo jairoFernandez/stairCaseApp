@@ -4,6 +4,7 @@
     <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
     <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
     <a href="{{ path('admin_profile_index') }}" class="btn btn-warning"> <i class="fa fa-user"></i> Perfil completo </a>
+    <a href="{{ path('fos_user_profile_edit') }}">Editar</a>
 </div>
 {% block javascriptsPropios %}
    

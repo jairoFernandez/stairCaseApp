@@ -54,5 +54,6 @@
 
             <a href="{{ path('admin_profile_edit', { 'id': perfil.id }) }}" class="btn btn-warning"> Editar</a>
             <a href="{{ path('fos_user_profile_show', { 'id': perfil.id }) }}" class="btn btn-info"> Datos seguridad</a>
+            <a href="{{ path('fos_user_resetting_request') }}"  class="btn btn-primary">Cambiar password</a>
     
 {% endblock %}

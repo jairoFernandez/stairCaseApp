@@ -12,7 +12,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{{ path('inicio-admin') }}">Inicio</a></li>
-                <li><a href="{{ path('admin_profile_index') }}">Perfil</a></li>
+                <li><a href="{{ path('admin_profile_index') }}">Perfil ({{ app.user.perfil[0] }})</a></li>
               
                 <li class="menuExtra"><a href="{{ path('admin_index') }}">Contactos</a></li>
                 <li class="menuExtra"><a href="{{ path('amigos') }}">Amigos</a></li>

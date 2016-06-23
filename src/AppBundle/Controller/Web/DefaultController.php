@@ -26,21 +26,23 @@ class DefaultController extends Controller
         // replace this example code with whatever you need
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-       
+
         $detallesQuery = $em->createQuery('
             SELECT a,c,asp,u,p FROM AppBundle:ContactoEscalera a
-                JOIN a.contacto c
-                JOIN a.aspecto asp
-                JOIN c.usuario u
-                JOIN u.perfil p
-                JOIN p.amistad am
-            WHERE am.usuario = :usuarioId and am.estado = 1
+            JOIN a.contacto c
+            JOIN a.aspecto asp
+            JOIN c.usuario u
+            JOIN u.perfil p
+            JOIN p.amistad am
+            WHERE am.usuario = :usuarioId and am.estado = 1 AND p.publico = true
+            ORDER BY a.fecha DESC
             ');
         $detallesQuery->setParameter('usuarioId', $user->getId());
+        $detallesQuery->setMaxResults(50);
         $detalles = $detallesQuery->getResult();
         return $this->render('web/index.html.twig', [
             'detalles' => $detalles
-        ]);
+            ]);
     }
 
     /**
@@ -65,12 +67,24 @@ class DefaultController extends Controller
             SELECT am FROM AppBundle:Amistad am
             INNER JOIN am.solicitante s
             INNER JOIN am.amigo a
-            WHERE s.id = :id OR a.id = :id
+            WHERE s.id = :id
             ');
         $amigosQuery->setParameter('id',$perfil->getId());
         $amigos = $amigosQuery->getResult();
+
+        $amigosPorAprobarQuery = $em->createQuery('
+            SELECT am FROM AppBundle:Amistad am
+            INNER JOIN am.solicitante s
+            INNER JOIN am.amigo a
+            WHERE a.id = :id AND am.estado = false
+            ');
+        $amigosPorAprobarQuery->setParameter('id',$perfil->getId());
+        $amigosPorAprobar = $amigosPorAprobarQuery->getResult();
+
+
         return $this->render('web/amigos.html.twig', [
-            'amigos' => $amigos
+            'amigos' => $amigos,
+            'amigosPorAprobar' => $amigosPorAprobar
             ]);
     }
 
@@ -95,13 +109,13 @@ class DefaultController extends Controller
         $result = $em->createQuery('
             SELECT p FROM AppBundle:Perfil p  
             WHERE p.id <> :usuario 
-                AND (
-                p.primerNombre LIKE :nombres OR 
-                p.segundoNombre LIKE :nombres OR
-                p.primerApellido LIKE :nombres OR
-                p.segundoApellido LIKE :nombres)
+            AND (
+            p.primerNombre LIKE :nombres OR 
+            p.segundoNombre LIKE :nombres OR
+            p.primerApellido LIKE :nombres OR
+            p.segundoApellido LIKE :nombres)
             
-        ')
+            ')
         ->setParameter('nombres', '%'.$nombreBuscado.'%')
         ->setParameter('usuario', $perfil->getId())
         ->getArrayResult();
@@ -144,7 +158,7 @@ class DefaultController extends Controller
             $amistad = new Amistad();
             $amistad->setSolicitante($miPerfil);
             $amistad->setAmigo($amigo);
-
+            $amistad->setEstado(false);
             $em->persist($amistad);
 
             $amistadUsuario = new AmistadUsuario();
@@ -172,5 +186,92 @@ class DefaultController extends Controller
         $response->setStatusCode($codigo);
         return $response;
 
+    }
+
+    /**
+     * [aprobarAmistad description]
+    * @Route("/aprobar-amigos/{idSolicitante}", name="aprobar-amigos")
+    * @Method("POST")
+     * @param  [Perfil] $idSolicitante [description]
+     * @return [type]                [description]
+     */
+    public function aprobarAmistad($idSolicitante)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $usuario = $this->getUser();
+        $miPerfil = $em->getRepository('AppBundle:Perfil')->findOneBy(array(
+            'usuario'=>$usuario->getId()
+            ));
+        // Busco la solicitud que me hicieron
+        $solicitud = $em->getRepository('AppBundle:Amistad')->findOneBy(array(
+            'solicitante' => $idSolicitante,
+            'amigo' => $miPerfil->getId()
+            ));
+        // La seteo a true!!
+        $solicitud->setEstado(true);
+        $solicitud->setFechaAceptacion(new \DateTime());
+        //Ahora busco el registro de Amistad usuario equivalente
+        $usuarioSolicitante = $em->getRepository('AppBundle:Perfil')->findOneBy(array(
+            'id' => $idSolicitante
+        ));
+
+        $idUsuario = $usuarioSolicitante->getUsuario()->getId();
+
+        $amistadUsuario = $em->getRepository('AppBundle:AmistadUsuario')->findOneBy(array(
+            'usuario' => $idUsuario,
+            'amigo'   => $miPerfil->getId()
+            ));
+       
+        //Lo seteo a true
+        $amistadUsuario->setEstado(true);
+
+
+        //Agrego este solicitante a mi lista de amistad usuario, primero lo busco 
+        $amistadUsuarioAgregado = $em->getRepository('AppBundle:AmistadUsuario')->findOneBy(array(
+            'usuario' => $usuario->getId(),
+            'amigo'   => $idSolicitante
+        ));
+
+        //Busco la amistad desde mi punto de vista
+        $solicitudMia = $em->getRepository('AppBundle:Amistad')->findOneBy(array(
+            'solicitante' => $miPerfil->getId(),
+            'amigo' => $idSolicitante
+        ));
+
+        if($solicitudMia == null){
+            $solicitudMia2 = new Amistad();
+            $solicitudMia2->setFechaAceptacion(new \DateTime());
+            $solicitudMia2->setEstado(true);
+            $solicitudMia2->setSolicitante($miPerfil);
+            $solicitudMia2->setAmigo($usuarioSolicitante);
+            $em->persist($solicitudMia2);
+        }else{
+            $solicitudMia->setEstado(true);
+            $solicitudMia->setFechaAceptacion(new \DateTime());
+        }
+
+        if($amistadUsuarioAgregado == null){
+            $amistadUsuarioAgregado2 = new AmistadUsuario();
+            $amistadUsuarioAgregado2->setUsuario($usuario);
+            $amistadUsuarioAgregado2->setAmigo($usuarioSolicitante);
+            $amistadUsuarioAgregado2->setEstado(true);
+            $em->persist($amistadUsuarioAgregado2);
+        }else{
+            $amistadUsuarioAgregado->setEstado(true);
+        }      
+
+        $em->flush();
+
+        $response = new JsonResponse();
+        
+        $response->setData(array(
+            'Resultados' => "Solicitud aprobada.",
+            'codigo'=> 201
+            ));
+
+        $response->setStatusCode(201);
+
+        return $response;
     }
 }

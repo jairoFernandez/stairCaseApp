@@ -11,12 +11,33 @@
 		</div><!-- /input-group -->
 	</div>
 	<div class="col-lg-12">
-		<h3>Resultados:</h3>
-	</div>
-	<div id="resultados" class="col-lg-6">
-		<!--<a href="#" class="list-group-item"> Sin resultados</a>-->
 	</div>
 	<div id="amigos" class="col-lg-6">
+		<h3>Solicitudes por aprobar</h3>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>Nombres</th>
+					<th>Solicitud</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for amigo in amigosPorAprobar %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ amigo.solicitante }}</td>
+					<td>{% if amigo.estado == false %} <a class="btn btn-warning btn-xs" onclick="aprobarAmistad('{{ amigo.solicitante.id }}')"> <i class="fa fa-plus"></i> Aprobar!</a>{% else %} <a class="btn btn-success btn-xs"> <i class="fa fa-plus"></i> Aceptada</a>{% endif %}</td>
+				</tr>
+				{% else %}
+				<tr>
+					<td colspan="3">No hay solicitudes pendientes</td>					
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<hr>
+		<h3>Amigos</h3>
 		<table class="table table-bordered">
 			<thead>
 				<tr>
@@ -32,9 +53,16 @@
 					<td>{{ amigo }}</td>
 					<td>{% if amigo.estado == false %} <a class="btn btn-danger btn-xs"> <i class="fa fa-plus"></i> Pendiente</a>{% else %} <a class="btn btn-success btn-xs"> <i class="fa fa-plus"></i> Aceptada</a>{% endif %}</td>
 				</tr>
+				{% else %}
+				<tr>
+					<td colspan="3">Aún no tienes amigos.</td>					
+				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
+	</div>
+	<div id="resultados" class="col-lg-6">
+		<!--<a href="#" class="list-group-item"> Sin resultados</a>-->
 	</div>
 </div>
 {% endblock %}
@@ -86,6 +114,22 @@
 			$.ajax(settingsAgregar).done(function (response) {
 
 				alert("Agregado!!!");
+				location.reload();
+			})
+		}		
+	}
+
+	function aprobarAmistad(id){
+		if(confirm("¿Estás seguro aprobar esta amistad?")){
+			var rutaAprobar = "{{ path('aprobar-amigos', { 'idSolicitante': 'nuevo-amigo' }) }}";
+			rutaAprobar = rutaAprobar.replace('nuevo-amigo',id);
+			var settingsAprobar = {
+				"url": rutaAprobar,
+				"method": "POST"
+			}
+			$.ajax(settingsAprobar).done(function (response) {
+
+				alert("Solicitud aprobada!!!");
 				location.reload();
 			})
 		}		

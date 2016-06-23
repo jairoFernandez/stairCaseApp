@@ -146,7 +146,6 @@ class Amistad
     public function setFechaActualiza()
     {
         $this->setFechaSolicitud(new \DateTime()); 
-        $this->setEstado(false);
     }
 
     /**

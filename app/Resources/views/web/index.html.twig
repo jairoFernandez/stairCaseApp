@@ -3,22 +3,30 @@
 {% block body %}
 <div class="container col-lg-12">
   <div class="page-header">
-    <h1 id="timeline">Social</h1>
+    <h3 id="timeline">Hola {{ app.user.perfil[0] }}, esto es lo último que ha pasado.</h3>
   </div>
   <ul class="timeline">
 
     {% for detalle in detalles %}
 
     <li {% if loop.index is odd %}class="timeline-inverted"{% endif %}>
-      <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i></div>
+      {% if loop.index is odd %}
+      <div class="timeline-badge success">
+        <i class="fa fa-users"></i>   
+      </div>
+      {% else %}
+       <div class="timeline-badge info">
+        <i class="fa fa-dashboard"></i>  
+      </div>
+      {% endif %} 
       <div class="timeline-panel">
         <div class="timeline-heading">
           <h4 class="timeline-title">{{ detalle.aspecto }}</h4>
-          <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{ detalle.fecha|date('d-M-Y') }}</small></p>
+          <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ detalle.fecha|date('d-M-Y') }}</small></p>
         </div>
         <div class="timeline-body">
           <p>
-                {% for perfil in detalle.contacto.usuario.perfil %} {{ perfil }} {% endfor %} ha logrado: <strong><i>{{ detalle.aspecto }}</i></strong> con la persona: <strong> {{ detalle.contacto }} </strong></p>
+               {% for perfil in detalle.contacto.usuario.perfil %} {{ perfil }} {% endfor %} ha avanzado en el proceso de  <strong> {{ detalle.contacto }}. </strong></p>
         </div>
       </div>
     </li>
